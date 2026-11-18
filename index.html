@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SR Garage Performance — Taller especializado</title>
+<meta name="description" content="SR Garage Performance: especialistas en vehículos japoneses, servicio especial BMW y Mercedes-Benz. Mecánica, latonería y pintura.">
+<meta name="theme-color" content="#080808">
+<link rel="icon" href="https://res.cloudinary.com/ql2k8tv7/image/upload/v1795040215/logo.jpg" type="image/jpeg">
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="grain">
+
+<a class="skip mono" href="#servicios">Saltar al contenido</a>
+
+<nav class="nav mono" aria-label="Principal">
+  <a href="#top" class="nav-name" aria-label="SR Garage Performance, inicio">
+    <img src="https://res.cloudinary.com/ql2k8tv7/image/upload/v1795040215/logo.jpg" alt="" width="34" height="34">
+    <span translate="no">SR Garage</span>
+  </a>
+  <div class="nav-links">
+    <a href="#servicios">Servicios</a><a href="#proceso">Proceso</a><a href="#especialistas">Especialistas</a><a href="#contacto">Contacto</a>
+  </div>
+  <button class="theme mono" type="button" aria-label="Cambiar a tema claro" aria-pressed="false">◐</button>
+</nav>
+
+<main id="top">
+
+  <!-- 1 · HERO — the logo-reveal film scrubs with scroll (down = forward, up = reverse).
+       Frames are cut from carbackground.mp4 by Cloudinary (so_<seconds> stills); main.js draws them to the canvas. -->
+  <section class="hero" id="hero">
+    <div class="hero-sticky">
+      <img class="hero-poster" src="https://res.cloudinary.com/ql2k8tv7/video/upload/so_0,w_1280/v1795040223/carbackground.webp" alt="" width="1280" height="720" fetchpriority="high">
+      <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
+      <span class="corner tl mono">Especialistas en<br>vehículos japoneses</span>
+      <span class="corner tr mono">Servicio especial<br>BMW · Mercedes-Benz</span>
+      <span class="corner bl mono">[CIUDAD], Colombia</span>
+      <span class="corner br mono" aria-hidden="true">Desliza ↓</span>
+      <!-- the film shows the logo itself, so the heading stays for screen readers and search only -->
+      <h1 class="sr-only">SR Garage Performance: especialistas en vehículos japoneses, servicio especial BMW y Mercedes-Benz</h1>
+    </div>
+  </section>
+
+  <!-- 2 · SERVICES — kinetic accordion (motion from the Nexus template's "Four systems. One spine." card).
+       Hover (mouse), focus (keyboard) or tap (touch) opens a column: it widens, the photo fades in from 1.06,
+       the details slide up. Each column = a full-size toggle button + a details panel beside it
+       (a heading, text and a link can't live inside a <button>). -->
+  <section class="fold" id="servicios" aria-labelledby="servicios-title">
+    <div class="fold-head wrap">
+      <h2 id="servicios-title">Tres áreas. Un taller.</h2>
+      <span class="mono">Servicios · Pasa el cursor o toca una columna</span>
+    </div>
+    <div class="accordion" id="accordion">
+      <div class="slice">
+        <img class="slice-img" src="https://res.cloudinary.com/ql2k8tv7/image/upload/v1795040215/mecanica.webp" alt="Área de mecánica del taller, bahías 4 y 5" width="1440" height="1080" loading="lazy">
+        <div class="slice-shade" aria-hidden="true"></div>
+        <button class="slice-toggle" type="button" aria-expanded="false" aria-controls="svc-mecanica">
+          <span class="slice-idle">
+            <span class="slice-num mono">01</span>
+            <span class="slice-idle-title">Mecánica</span>
+            <span class="slice-num mono" aria-hidden="true">+</span>
+          </span>
+        </button>
+        <div class="slice-reveal" id="svc-mecanica" inert>
+          <span class="mono">01 · Bahías 4–5</span>
+          <h3>Mecánica</h3>
+          <p>Servicio mecánico para vehículos japoneses, BMW y Mercedes-Benz.</p>
+          <a class="slice-cta" href="#contacto">Cotizar por WhatsApp →</a>
+        </div>
+      </div>
+      <div class="slice">
+        <img class="slice-img" src="https://res.cloudinary.com/ql2k8tv7/image/upload/v1795040215/latoneria.webp" alt="Área de latonería con un vehículo en reparación de carrocería" width="1440" height="1080" loading="lazy">
+        <div class="slice-shade" aria-hidden="true"></div>
+        <button class="slice-toggle" type="button" aria-expanded="false" aria-controls="svc-latoneria">
+          <span class="slice-idle">
+            <span class="slice-num mono">02</span>
+            <span class="slice-idle-title">Latonería</span>
+            <span class="slice-num mono" aria-hidden="true">+</span>
+          </span>
+        </button>
+        <div class="slice-reveal" id="svc-latoneria" inert>
+          <span class="mono">02 · Bahías 8–12</span>
+          <h3>Latonería</h3>
+          <p>Reparación de carrocería en su propia área del taller.</p>
+          <a class="slice-cta" href="#contacto">Cotizar por WhatsApp →</a>
+        </div>
+      </div>
+      <div class="slice">
+        <img class="slice-img" src="https://res.cloudinary.com/ql2k8tv7/image/upload/v1795040215/pintura.webp" alt="Cabinas de pintura del taller" width="1209" height="767" loading="lazy">
+        <div class="slice-shade" aria-hidden="true"></div>
+        <button class="slice-toggle" type="button" aria-expanded="false" aria-controls="svc-pintura">
+          <span class="slice-idle">
+            <span class="slice-num mono">03</span>
+            <span class="slice-idle-title">Pintura</span>
+            <span class="slice-num mono" aria-hidden="true">+</span>
+          </span>
+        </button>
+        <div class="slice-reveal" id="svc-pintura" inert>
+          <span class="mono">03 · Cabina de pintura</span>
+          <h3>Pintura</h3>
+          <p>Pintura en cabina cerrada, dentro del mismo taller.</p>
+          <a class="slice-cta" href="#contacto">Cotizar por WhatsApp →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · PROCESS — the shop's own zones, in order (draft: confirm with the owner) -->
+  <section class="approach" id="proceso">
+    <div class="steps" id="steps" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="eyebrow mono"><span>Proceso</span><span>5 pasos</span></div>
+      <h2>Del portón<br>a la entrega.</h2>
+      <ol class="cards">
+        <li><span class="mono">01</span><h3>Recepción</h3><p>Recibimos tu vehículo en las bahías 1 a 3 y registramos su estado.</p></li>
+        <li><span class="mono">02</span><h3>Diagnóstico</h3><p>Revisamos qué necesita antes de tocar nada.</p></li>
+        <li><span class="mono">03</span><h3>Cotización</h3><p>Te enviamos el presupuesto por WhatsApp para que lo apruebes.</p></li>
+        <li><span class="mono">04</span><h3>Trabajo</h3><p>Mecánica, latonería o pintura, cada uno en su área.</p></li>
+        <li><span class="mono">05</span><h3>Entrega</h3><p>Alistamiento final y entrega del vehículo.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4 · SPECIALISTS — the two claims on the logo -->
+  <section class="about" id="especialistas">
+    <div class="wrap about-grid">
+      <div class="about-text">
+        <div class="eyebrow mono"><span>Especialistas</span><span>Japoneses · Alemanes</span></div>
+        <h2>Sabemos lo que tiene tu carro.</h2>
+        <p>Somos especialistas en vehículos japoneses y damos servicio especial a BMW y Mercedes-Benz.</p>
+        <p>[Historia del taller: años de experiencia, equipo y lo que los diferencia. Texto por confirmar con el dueño.]</p>
+        <dl class="facts mono">
+          <div><dt>Marcas</dt><dd>Japonesas · BMW · Mercedes-Benz</dd></div>
+          <div><dt>Servicios</dt><dd>Mecánica · Latonería · Pintura</dd></div>
+          <div><dt>Ubicación</dt><dd>[DIRECCIÓN]</dd></div>
+          <div><dt>Horario</dt><dd>[HORARIO]</dd></div>
+        </dl>
+      </div>
+      <div class="badge-wrap">
+        <div class="badge">
+          <img src="https://res.cloudinary.com/ql2k8tv7/image/upload/v1795040215/logo.jpg" alt="Logo SR Garage Performance" width="640" height="640" loading="lazy">
+        </div>
+        <!-- the logo's blue→red ring, drawn once around the badge -->
+        <svg class="badge-ring" viewBox="0 0 100 100" aria-hidden="true">
+          <defs>
+            <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#086FCD"/><stop offset=".55" stop-color="#3B82F6"/><stop offset="1" stop-color="#C71018"/>
+            </linearGradient>
+          </defs>
+          <circle cx="50" cy="50" r="48.5" pathLength="1" fill="none" stroke="url(#ring-grad)" stroke-width="1.3" stroke-linecap="butt" transform="rotate(-90 50 50)"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · CONTACT — the single red event -->
+  <section class="contact" id="contacto">
+    <div class="wrap">
+      <div class="eyebrow mono"><span><i class="dot" aria-hidden="true"></i>Respondemos por WhatsApp</span><span>Contacto</span></div>
+      <h2 class="contact-type">Cotiza por<br>WhatsApp.</h2>
+      <div class="pills">
+        <!-- TODO: replace [WHATSAPP] with the real number, e.g. https://wa.me/57XXXXXXXXXX -->
+        <a class="pill pill-primary" href="#contacto">Cotizar por WhatsApp · [WHATSAPP]</a>
+        <a class="pill" href="#contacto">Instagram [@USUARIO]</a>
+        <span class="pill pill-static">[DIRECCIÓN]</span>
+        <span class="pill pill-static">[HORARIO]</span>
+      </div>
+    </div>
+    <footer class="wrap mono"><span>© 2026 <span translate="no">SR Garage Performance</span></span><span>Especialistas en vehículos japoneses · BMW · Mercedes-Benz</span></footer>
+  </section>
+
+</main>
+
+<!-- mobile: WhatsApp always one tap away -->
+<a class="wa-fab" href="#contacto">Cotizar por WhatsApp</a>
+
+<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+/* ==========================================================
+   SR GARAGE PERFORMANCE — design tokens
+   Spacing, type, radii and motion follow the Fibonacci system from the
+   portfolio template (1 2 3 5 8 13 21 34 55 89 144 233 377 610).
+   Colors are sampled from the SR Garage logo (see Main.pdf).
+   Every text pair below was computed against WCAG 2.x (AA = 4.5:1).
+   ========================================================== */
+
+:root {
+  /* ---- brand colors (logo) ---- */
+  --black:      #080808;  /* logo background                          */
+  --carbon:     #111214;  /* one step above black                      */
+  --steel:      #26282C;  /* hairlines on dark (decor only)            */
+  --chrome:     #D7D7D7;  /* lettering — 13.92:1 on black              */
+  --alloy:      #9A9EA5;  /* secondary text on dark — 7.45:1           */
+  --blue:       #086FCD;  /* logo blue — fills only (white 5.04:1)     */
+  --blue-lt:    #3B82F6;  /* blue text on dark — 5.45:1                */
+  --blue-dk:    #0A5DB0;  /* blue text on light — 5.95:1 / 5.20:1      */
+  --red:        #C71018;  /* logo red — fills, large text (white 5.97) */
+  --red-lt:     #FF3B3B;  /* red text on dark — 5.67:1                 */
+  --paper:      #F4F4F2;  /* light theme ground                        */
+  --fog:        #E4E5E7;  /* light theme surface                       */
+  --graphite:   #4A4E55;  /* secondary text on light — 7.59:1          */
+
+  /* ---- semantic: dark is the brand default ---- */
+  --bg:          var(--black);
+  --surface:     var(--carbon);
+  --text:        var(--chrome);
+  --text-2:      var(--alloy);
+  --line:        var(--steel);
+  --accent:      var(--blue-lt);   /* links, labels, focus ring */
+  --alert:       var(--red-lt);
+  --fill:        var(--blue);      /* primary button fill */
+  --fill-alert:  var(--red);
+  --on-fill:     #FFFFFF;
+  --veil:        rgb(8 8 8 / .72); /* dark layer over photos */
+
+  /* ---- spacing (px) ---- */
+  --s-1: 1px;  --s-2: 2px;  --s-3: 3px;  --s-5: 5px;  --s-8: 8px;
+  --s-13: 13px; --s-21: 21px; --s-34: 34px; --s-55: 55px;
+  --s-89: 89px; --s-144: 144px; --s-233: 233px;
+
+  /* ---- type scale (px, fluid between neighbouring steps) ---- */
+  --t-13:  13px;
+  --t-21:  21px;
+  --t-34:  clamp(21px, 3vw, 34px);
+  --t-55:  clamp(34px, 5vw, 55px);
+  --t-89:  clamp(55px, 8vw, 89px);
+  --t-144: clamp(55px, 13vw, 144px);
+  --t-233: clamp(55px, 17vw, 233px);
+
+  --lh-body: 1.618;  /* φ */
+  --lh-display: .89;
+
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  /* ---- radii: sharp, like the moodboard ---- */
+  --r-3: 3px; --r-5: 5px; --r-pill: 987px;
+
+  /* ---- motion (ms) ---- */
+  --m-89: 89ms; --m-144: 144ms; --m-233: 233ms; --m-377: 377ms; --m-610: 610ms;
+  --ease: cubic-bezier(.23, 1, .32, 1);            /* strong ease-out: enter, hover, press */
+  --ease-in-out: cubic-bezier(.77, 0, .175, 1);    /* on-screen movement */
+  --ease-silk: cubic-bezier(.16, 1, .3, 1);        /* services accordion — the Nexus template's curve */
+
+  /* ---- layout ---- */
+  --max: 1597px;
+  --gutter: var(--s-21);
+  --phi: 1.618;
+
+  /* ---- film grain ---- */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='233' height='233'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.89' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --grain-o: .08;
+
+  color-scheme: dark;
+}
+
+@media (min-width: 610px) { :root { --gutter: var(--s-34); } }
+@media (min-width: 1597px) { :root { --gutter: var(--s-55); } }
+
+/* ---- light theme: only via the toggle ---- */
+:root[data-theme="light"] {
+  --bg: var(--paper); --surface: var(--fog);
+  --text: var(--black); --text-2: var(--graphite); --line: #8A8F93;
+  --accent: var(--blue-dk); --alert: var(--red);
+  --veil: rgb(8 8 8 / .55);
+  --grain-o: .05;
+  color-scheme: light;
+}
+
+/* ---- shared base ---- */
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  -webkit-text-size-adjust: 100%; scroll-behavior: smooth;
+  --nav-h: calc(var(--s-55) + var(--s-21));          /* fixed nav bar height */
+  scroll-padding-top: var(--nav-h);                    /* focused/anchored content never lands under the nav */
+}
+@media (max-width: 609px) { html { scroll-padding-bottom: var(--s-89); } }   /* … nor under the WhatsApp bar */
+@media (pointer: fine) { html { overscroll-behavior: none; } }               /* no rubber-band on desktop; touch keeps pull-to-refresh */
+a, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }   /* press feedback comes from :active styles */
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 var(--t-21)/var(--lh-body) var(--font-body);
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; }
+.mono { font: 500 var(--t-13)/var(--lh-body) var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
+.grain::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 89;
+  background-image: var(--grain); opacity: var(--grain-o); mix-blend-mode: screen;
+}
+:root[data-theme="light"] .grain::after { mix-blend-mode: multiply; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

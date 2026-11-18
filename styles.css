@@ -1,0 +1,271 @@
+/* SR Garage Performance — adapted from the portfolio template.
+   Every value is a token from tokens.css or a Fibonacci number. */
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 max(var(--gutter), env(safe-area-inset-right, 0px)) 0 max(var(--gutter), env(safe-area-inset-left, 0px)); }
+h1, h2, h3 { font-family: var(--font-display); line-height: var(--lh-display); margin: 0; font-style: italic; text-wrap: balance; }
+h2 { font-size: var(--t-89); font-weight: 800; font-stretch: 112%; letter-spacing: -.01em; }
+h3 { font-size: var(--t-34); font-weight: 700; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: var(--s-2) solid var(--accent); outline-offset: var(--s-3); }
+.eyebrow { display: flex; justify-content: space-between; gap: var(--s-21); margin-bottom: var(--s-34); color: var(--text-2); flex-wrap: wrap; }
+
+.skip { position: absolute; left: var(--gutter); top: calc(var(--s-8) * -8); z-index: 144; background: var(--fill); color: var(--on-fill); padding: var(--s-8) var(--s-13); border-radius: var(--r-3); text-decoration: none; }
+.skip:focus-visible { top: calc(var(--s-8) + env(safe-area-inset-top, 0px)); }
+
+/* ---------- nav ---------- */
+.nav {
+  position: fixed; inset: 0 0 auto; z-index: 55; display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-21);
+  padding: calc(var(--s-13) + env(safe-area-inset-top, 0px)) max(var(--gutter), env(safe-area-inset-right, 0px)) var(--s-13) max(var(--gutter), env(safe-area-inset-left, 0px));
+  color: var(--chrome);
+  background: rgb(8 8 8 / .89);   /* a black bar in both themes: the logo and chrome links always read */
+  -webkit-backdrop-filter: blur(13px); backdrop-filter: blur(13px);
+  border-bottom: var(--s-1) solid var(--steel);
+}
+.nav a { text-decoration: none; }
+.nav-name { display: inline-flex; align-items: center; gap: var(--s-8); }
+.nav-name img { width: var(--s-34); height: var(--s-34); border-radius: var(--r-pill); }
+.nav-links { display: flex; gap: var(--s-21); }
+.nav-links a { position: relative; padding-block: var(--s-8); }
+.nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: var(--s-3); height: var(--s-1); background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform var(--m-233) var(--ease); }
+.nav-links a:focus-visible::after { transform: scaleX(1); }
+@media (hover: hover) and (pointer: fine) { .nav-links a:hover::after { transform: scaleX(1); } }
+.theme { background: none; border: 0; color: inherit; cursor: pointer; min-width: 44px; min-height: 44px; font-size: var(--t-21); line-height: 1; }
+@media (max-width: 609px) {
+  .nav-name span, .nav-links { display: none; }
+  .corner.tr, .corner.br { display: none; }   /* two top corners collide at phone width */
+}
+
+/* ---------- 1 · hero (always dark: it sits on the photo) ---------- */
+.hero { height: 233vh; background: var(--black); }
+.hero-sticky { position: sticky; top: 0; height: 100vh; height: 100svh; display: grid; place-items: center; overflow: hidden; color: var(--chrome); }
+.hero-poster, .hero-canvas { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; }
+.hero-poster { object-fit: cover; object-position: 50% 50%; }
+.hero-canvas { display: block; }
+/* vignette, not a flat veil: the film's logo stays bright in the centre, the corner labels sit on dark edges */
+.hero-sticky::after { content: ""; position: absolute; inset: 0; z-index: 1;
+  background: radial-gradient(ellipse 89% 89% at 50% 50%, rgb(8 8 8 / 0) 34%, rgb(8 8 8 / .89) 100%); }
+/* corners sit on a moving film: a dark chip keeps them readable on every frame
+   (chrome on .79 black over pure white = 7.7:1, so AA holds whatever the film shows) */
+.corner { position: absolute; z-index: 2; color: var(--chrome); background: rgb(8 8 8 / .79); padding: var(--s-3) var(--s-8); border-radius: var(--r-3); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.tl { top: calc(var(--s-89) + env(safe-area-inset-top, 0px)); left: var(--gutter); }
+.tr { top: calc(var(--s-89) + env(safe-area-inset-top, 0px)); right: var(--gutter); text-align: right; }
+.bl { bottom: var(--s-21); left: var(--gutter); }
+.br { bottom: var(--s-21); right: var(--gutter); text-align: right; }
+
+/* ---------- 2 · services: kinetic accordion (motion from the Nexus template) ---------- */
+.fold {
+  display: flex; flex-direction: column;
+  height: 100vh; height: 100svh; min-height: 610px;
+  padding-top: calc(var(--s-89) + env(safe-area-inset-top, 0px));
+  background: var(--bg); color: var(--text);
+  scroll-margin-top: calc(var(--nav-h) * -1);   /* full-screen section: its own padding clears the nav */
+}
+.fold-head { width: 100%; display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-13); flex-wrap: wrap; }
+.fold-head h2 { font-size: var(--t-55); }
+.fold-head .mono { color: var(--text-2); }
+.accordion { flex: 1; display: flex; width: 100%; margin-top: var(--s-21); border-top: var(--s-1) solid var(--line); min-height: 0;
+  contain: layout paint; }   /* the template animates flex-grow (layout); containment keeps that reflow inside the accordion */
+
+.slice {
+  position: relative; flex: 1 1 0; min-width: 0; overflow: hidden;
+  border-right: var(--s-1) solid var(--line); background: var(--bg);
+  transition: flex-grow 987ms var(--ease-silk);
+}
+.slice:last-child { border-right: 0; }
+.slice.active { flex-grow: 3.7; }
+
+.slice-img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transform: scale(1.06);
+  transition: opacity 987ms var(--ease-silk), transform 987ms var(--ease-silk);
+}
+.slice.active .slice-img { opacity: 1; transform: scale(1); }
+.slice-shade {
+  position: absolute; inset: 0; opacity: 0; pointer-events: none;
+  background: linear-gradient(to top, rgb(8 8 8 / .89), rgb(8 8 8 / .34) 55%, rgb(8 8 8 / .13));
+  transition: opacity 987ms var(--ease-silk);
+}
+.slice.active .slice-shade { opacity: 1; }
+
+/* the whole column is the toggle */
+.slice-toggle {
+  position: absolute; inset: 0; z-index: 1; width: 100%; padding: 0; margin: 0;
+  background: none; border: 0; color: inherit; font: inherit; cursor: pointer; text-align: left;
+}
+.slice-toggle:focus-visible { outline: var(--s-2) solid var(--accent); outline-offset: calc(var(--s-3) * -1); }
+.slice.active .slice-toggle { cursor: default; }
+.slice-idle {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+  padding: var(--s-21) 0 var(--s-34);
+  transition: opacity 610ms var(--ease-silk);
+}
+.slice.active .slice-idle { opacity: 0; }
+.slice-num { color: var(--text-2); }
+.slice-idle-title {
+  writing-mode: vertical-rl; font-family: var(--font-display); font-style: italic; font-weight: 800; font-stretch: 112%;
+  font-size: var(--t-34); letter-spacing: .08em; text-transform: uppercase; color: var(--text);
+}
+
+.slice-reveal {
+  position: absolute; z-index: 2; left: var(--s-34); right: var(--s-34); bottom: var(--s-34);
+  display: grid; gap: var(--s-8); color: var(--chrome);
+  opacity: 0; transform: translateY(var(--s-13)); pointer-events: none;
+  transition: opacity 987ms var(--ease-silk), transform 987ms var(--ease-silk);
+}
+.slice.active .slice-reveal { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.slice-reveal .mono { color: var(--chrome); }   /* blue measured 2.97:1 over the brighter photos; chrome ≥ 7.59:1 */
+.slice-reveal h3 { font-size: var(--t-55); font-stretch: 112%; font-weight: 800; white-space: nowrap; }
+.slice-reveal p { font-size: var(--t-21); max-width: 28em; color: var(--chrome); }
+.slice-cta {
+  justify-self: start; display: inline-flex; align-items: center; min-height: 44px; margin-top: var(--s-5);
+  padding: 0 var(--s-21); background: var(--blue); color: #FFFFFF; text-decoration: none; font-weight: 600;
+  border-radius: var(--r-3); transition: transform var(--m-144) var(--ease);
+}
+.slice-cta:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) {
+  .slice-cta { transition: transform var(--m-144) var(--ease), background-color var(--m-144) ease; }
+  .slice-cta:hover { background: var(--blue-dk); }
+  .theme:hover, .nav-name:hover { color: var(--blue-lt); }
+}
+.theme, .nav-name { transition: color var(--m-144) ease; }
+.slice-cta:focus-visible { outline: var(--s-2) solid var(--chrome); outline-offset: var(--s-3); }
+
+@media (max-width: 900px) {
+  .accordion { flex-direction: column; }
+  .slice { border-right: 0; border-bottom: var(--s-1) solid var(--line); }
+  .slice:last-child { border-bottom: 0; }
+  .slice-idle { flex-direction: row; justify-content: space-between; padding: 0 var(--gutter); }
+  .slice-idle-title { writing-mode: horizontal-tb; }
+  .slice-reveal { left: var(--gutter); right: var(--gutter); bottom: var(--s-21); }
+  .slice-reveal h3 { white-space: normal; }
+  .slice-reveal p { font-size: var(--t-13); }
+}
+@media (max-width: 609px) {
+  .fold { padding-bottom: calc(var(--s-55) + var(--s-21) + env(safe-area-inset-bottom, 0px)); }  /* clear the WhatsApp bar */
+}
+
+/* ---------- 3 · process ---------- */
+.approach { position: relative; padding: var(--s-144) 0; overflow: hidden; color: var(--chrome); background: var(--black); }
+.steps { position: absolute; inset: 0; display: grid; grid-template-rows: repeat(13, 1fr); }
+.steps i { background: linear-gradient(90deg, var(--blue), var(--black) 55%, var(--red) 100%); background-size: 233% 100%; opacity: .55; }
+.approach .wrap { position: relative; }
+.approach .eyebrow { color: var(--chrome); }
+.approach h2 { margin-bottom: var(--s-89); }
+.cards { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-13); }
+@media (min-width: 610px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 987px) {
+  .cards { grid-template-columns: repeat(5, 1fr); align-items: start; }
+  /* stagger offset lives on `translate`, so `scale` (pop + zoom) never overwrites it */
+  .cards li:nth-child(2) { translate: 0 var(--s-34); }
+  .cards li:nth-child(3) { translate: 0 var(--s-13); }
+  .cards li:nth-child(4) { translate: 0 var(--s-55); }
+  .cards li:nth-child(5) { translate: 0 var(--s-21); }
+}
+.cards li { background: var(--carbon); color: var(--chrome); border: var(--s-1) solid var(--steel); border-radius: var(--r-5); padding: var(--s-21); display: grid; gap: var(--s-13);
+  position: relative; transform-origin: 50% 50%;
+  transition: scale var(--m-233) var(--ease); }   /* the proximity zoom retargets smoothly between pointer moves */
+
+/* pop out, once: main.js adds .will-pop (cards waiting) and then .is-in when the list scrolls into view.
+   Without JS neither class exists, so the cards simply show. Only scale + opacity animate (composite-only). */
+.cards.will-pop li { opacity: 0; scale: .89; }
+.cards.will-pop.is-in li { opacity: 1; scale: 1; animation: pop-out 610ms var(--ease) backwards; }
+.cards.is-in li:nth-child(2) { animation-delay: 55ms; }
+.cards.is-in li:nth-child(3) { animation-delay: 89ms; }
+.cards.is-in li:nth-child(4) { animation-delay: 144ms; }
+.cards.is-in li:nth-child(5) { animation-delay: 233ms; }
+@keyframes pop-out {
+  0%     { opacity: 0; scale: .89; }
+  61.8%  { opacity: 1; scale: 1.03; }   /* the small overshoot is the "pop" */
+  100%   { opacity: 1; scale: 1; }
+}
+.cards .mono { color: var(--blue-lt); }
+.cards p { font-size: var(--t-13); line-height: var(--lh-body); color: var(--alloy); }
+
+/* ---------- 4 · specialists ---------- */
+.about { background: var(--surface); color: var(--text); padding: var(--s-144) 0; border-radius: 50% 50% 0 0 / var(--s-89) var(--s-89) 0 0; margin-top: calc(var(--s-89) * -1); position: relative; }
+.about-grid { display: grid; gap: var(--s-55); align-items: center; }
+@media (min-width: 987px) { .about-grid { grid-template-columns: 8fr 5fr; } }
+.about-text { display: grid; gap: var(--s-21); }
+.about-text p { max-width: 34em; color: var(--text-2); }
+.facts { display: grid; gap: var(--s-8); margin: var(--s-13) 0 0; }
+.facts div { position: relative; display: grid; grid-template-columns: var(--s-144) 1fr; gap: var(--s-13); padding-top: var(--s-8); }
+.facts div::before { content: ""; position: absolute; inset: 0 0 auto; height: var(--s-1); background: var(--line); transform-origin: left; }   /* the row rule (drawn on reveal) */
+.facts dt { color: var(--text-2); }
+.facts dd { margin: 0; }
+.badge-wrap { position: relative; justify-self: center; width: min(100%, 377px); aspect-ratio: 1;
+  transform: perspective(610px) rotateX(0deg) rotateY(0deg); transition: transform var(--m-377) var(--ease); }   /* JS tilts it toward the mouse */
+.badge { width: 100%; height: 100%; border-radius: var(--r-pill); overflow: hidden; background: var(--black); box-shadow: 0 0 0 var(--s-1) var(--line); }
+.badge img { width: 100%; height: 100%; object-fit: cover; }
+.badge-ring { position: absolute; inset: calc(var(--s-13) * -1); width: calc(100% + var(--s-13) * 2); height: calc(100% + var(--s-13) * 2); pointer-events: none; overflow: visible; }
+.badge-ring circle { stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+/* ---------- specialists reveal, once: main.js adds .will-reveal, then .is-in on first sight.
+   Without JS (or with reduced motion) neither class is set and everything simply shows. ---------- */
+.about.will-reveal .about-text > *,
+.about.will-reveal .facts > div { opacity: 0; translate: 0 var(--s-21); }
+.about.will-reveal .facts > div::before { transform: scaleX(0); }
+.about.will-reveal .badge { opacity: 0; scale: .89; }
+.about.will-reveal .badge-ring circle { stroke-dashoffset: 1; opacity: 0; }
+
+.about.is-in .about-text > *,
+.about.is-in .facts > div { opacity: 1; translate: 0 0; animation: rise 610ms var(--ease) backwards; }
+.about.is-in .about-text > :nth-child(2) { animation-delay: 55ms; }
+.about.is-in .about-text > :nth-child(3) { animation-delay: 144ms; }
+.about.is-in .about-text > :nth-child(4) { animation-delay: 233ms; }
+.about.is-in .about-text > :nth-child(5) { animation-delay: 377ms; }
+/* the facts rows follow the list itself, each rule drawing left → right */
+.about.is-in .facts > div:nth-child(1) { animation-delay: 433ms; }
+.about.is-in .facts > div:nth-child(2) { animation-delay: 488ms; }
+.about.is-in .facts > div:nth-child(3) { animation-delay: 521ms; }
+.about.is-in .facts > div:nth-child(4) { animation-delay: 555ms; }
+.about.is-in .facts > div::before { transform: scaleX(1); animation: draw-rule 610ms var(--ease-in-out) backwards; animation-delay: inherit; }
+.about.is-in .badge { opacity: 1; scale: 1; animation: pop-out 610ms var(--ease) 144ms backwards; }
+.about.is-in .badge-ring circle { stroke-dashoffset: 0; opacity: 1; animation: draw-ring 987ms var(--ease-in-out) 610ms backwards; }
+
+@keyframes rise { from { opacity: 0; translate: 0 var(--s-21); } }
+@keyframes draw-rule { from { transform: scaleX(0); } }
+@keyframes draw-ring { from { stroke-dashoffset: 1; opacity: 0; } 2% { opacity: 1; } }   /* hidden until it starts: no hairline tick at 12 o'clock */
+
+/* ---------- 5 · contact ---------- */
+.contact { background: var(--bg); color: var(--text); padding: var(--s-144) 0 var(--s-34); }
+.contact .eyebrow span:first-child { display: inline-flex; align-items: center; gap: var(--s-8); }
+.dot { width: var(--s-13); height: var(--s-13); border-radius: var(--r-pill); background: var(--red); animation: pulse 1.597s var(--ease) infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgb(199 16 24 / .55); } 50% { box-shadow: 0 0 0 var(--s-8) rgb(199 16 24 / 0); } }
+.contact-type { word-spacing: .13em; font-size: var(--t-144); font-stretch: 62%; font-weight: 900; text-transform: uppercase; margin-bottom: var(--s-55); transition: font-stretch var(--m-610) var(--ease); }
+@media (hover: hover) and (pointer: fine) { .contact-type:hover { font-stretch: 125%; } }
+.pills { display: flex; flex-wrap: wrap; gap: var(--s-13); }
+.pill {
+  text-decoration: none; border: var(--s-1) solid var(--line); border-radius: var(--r-3);
+  padding: var(--s-13) var(--s-21); font-size: var(--t-21); line-height: 1; min-height: 44px; display: inline-flex; align-items: center;
+  transition: background-color var(--m-144) ease, color var(--m-144) ease, border-color var(--m-144) ease, transform var(--m-144) var(--ease);
+}
+.pill-static { color: var(--text-2); }
+a.pill:active { transform: scale(.97); }
+a.pill:focus-visible { background: var(--text); color: var(--bg); border-color: var(--text); }
+@media (hover: hover) and (pointer: fine) { a.pill:hover { background: var(--text); color: var(--bg); border-color: var(--text); } }
+.pill-primary { background: var(--fill); color: var(--on-fill); border-color: var(--fill); }
+.contact footer { display: flex; justify-content: space-between; gap: var(--s-21); flex-wrap: wrap; margin-top: var(--s-144); padding-top: var(--s-21); border-top: var(--s-1) solid var(--line); color: var(--text-2); }
+
+/* ---------- mobile WhatsApp button ---------- */
+.wa-fab {
+  position: fixed; z-index: 55; left: max(var(--s-13), env(safe-area-inset-left, 0px)); right: max(var(--s-13), env(safe-area-inset-right, 0px));
+  bottom: calc(var(--s-13) + env(safe-area-inset-bottom, 0px));
+  display: none; justify-content: center; align-items: center; min-height: var(--s-55);
+  background: var(--blue); color: #FFFFFF; font: 600 var(--t-21)/1 var(--font-body); text-decoration: none;
+  border-radius: var(--r-3); transition: transform var(--m-144) var(--ease);
+}
+.wa-fab:active { transform: scale(.97); }
+@media (max-width: 609px) {
+  .wa-fab { display: flex; }
+  .contact { padding-bottom: var(--s-89); }
+}
+
+/* ---------- reduced motion: freeze the hero film (transitions are already off in tokens.css) ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .hero { height: auto; }
+  .hero-sticky { position: relative; }
+  .hero-canvas { display: none; }   /* reduced motion: the poster still stands in for the film */
+}
