@@ -23,9 +23,11 @@
     <img src="https://res.cloudinary.com/ql2k8tv7/image/upload/v1795040215/logo.jpg" alt="" width="34" height="34">
     <span translate="no">SR Garage</span>
   </a>
-  <div class="nav-links">
+  <div class="nav-links" id="nav-links">
     <a href="#servicios">Servicios</a><a href="#proceso">Proceso</a><a href="#especialistas">Especialistas</a><a href="#contacto">Contacto</a>
   </div>
+  <!-- phones only: opens the link list (hidden at 610px and up) -->
+  <button class="menu-btn mono" type="button" aria-expanded="false" aria-controls="nav-links">Menú</button>
   <button class="theme mono" type="button" aria-label="Cambiar a tema claro" aria-pressed="false">◐</button>
 </nav>
 
@@ -35,7 +37,12 @@
        Frames are cut from carbackground.mp4 by Cloudinary (so_<seconds> stills); main.js draws them to the canvas. -->
   <section class="hero" id="hero">
     <div class="hero-sticky">
-      <img class="hero-poster" src="https://res.cloudinary.com/ql2k8tv7/video/upload/so_0,w_1280/v1795040223/carbackground.webp" alt="" width="1280" height="720" fetchpriority="high">
+      <picture>
+        <!-- phones held upright: the 9:16 film — its last frame (full logo) when motion is reduced, else frame 1 -->
+        <source media="(max-width: 609px) and (orientation: portrait) and (prefers-reduced-motion: reduce)" srcset="https://res.cloudinary.com/ql2k8tv7/video/upload/so_7.917,w_720/v1795043998/A_car_store_logo_is_animated_wit_986836_mvp.webp" width="720" height="1280">
+        <source media="(max-width: 609px) and (orientation: portrait)" srcset="https://res.cloudinary.com/ql2k8tv7/video/upload/so_0,w_720/v1795043998/A_car_store_logo_is_animated_wit_986836_mvp.webp" width="720" height="1280">
+        <img class="hero-poster" src="https://res.cloudinary.com/ql2k8tv7/video/upload/so_0,w_1280/v1795040223/carbackground.webp" alt="" width="1280" height="720" fetchpriority="high">
+      </picture>
       <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
       <span class="corner tl mono">Especialistas en<br>vehículos japoneses</span>
       <span class="corner tr mono">Servicio especial<br>BMW · Mercedes-Benz</span>
