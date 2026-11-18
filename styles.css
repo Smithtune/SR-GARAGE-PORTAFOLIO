@@ -32,9 +32,57 @@ a { color: inherit; }
 .nav-links a:focus-visible::after { transform: scaleX(1); }
 @media (hover: hover) and (pointer: fine) { .nav-links a:hover::after { transform: scaleX(1); } }
 .theme { background: none; border: 0; color: inherit; cursor: pointer; min-width: 44px; min-height: 44px; font-size: var(--t-21); line-height: 1; }
+.menu-btn { display: none; }
 @media (max-width: 609px) {
-  .nav-name span, .nav-links { display: none; }
+  .nav-name span { display: none; }
   .corner.tr, .corner.br { display: none; }   /* two top corners collide at phone width */
+
+  /* phone menu — the bar's blur moves to ::before, so the nav is no longer a backdrop root
+     and the list panel can blur the real page behind it */
+  .nav { -webkit-backdrop-filter: none; backdrop-filter: none; background: none; gap: var(--s-8); }
+  .nav::before { content: ""; position: absolute; inset: 0; z-index: -1; background: rgb(8 8 8 / .89);
+    -webkit-backdrop-filter: blur(13px); backdrop-filter: blur(13px); }
+  .nav-name { margin-right: auto; }
+  .menu-btn { display: block; background: none; border: 0; color: inherit; cursor: pointer; min-height: 44px; padding-inline: var(--s-8); }
+  .menu-btn:focus-visible, .theme:focus-visible { outline: 2px solid var(--blue-lt); outline-offset: 2px; }
+
+  .nav-links {
+    position: fixed; inset: 0;   /* full screen, painted under the bar (z-index -2 < the bar's ::before) */
+    z-index: -2; display: flex; flex-direction: column; gap: var(--s-8);
+    padding: calc(var(--nav-h) + env(safe-area-inset-top, 0px) + var(--s-34)) max(var(--gutter), env(safe-area-inset-right, 0px)) var(--s-55) max(var(--gutter), env(safe-area-inset-left, 0px));
+    background: rgb(8 8 8 / .72);
+    -webkit-backdrop-filter: blur(13px); backdrop-filter: blur(13px);
+    counter-reset: menu;
+    opacity: 0; visibility: hidden;
+    transition: opacity var(--m-233) var(--ease), visibility 0s linear var(--m-233);
+  }
+  :root[data-theme="light"] .nav-links { background: rgb(244 244 242 / .8); }
+  .nav-links a {
+    align-self: flex-start; display: flex; align-items: baseline; gap: var(--s-13);
+    font: 800 var(--t-34)/1.1 var(--font-display); font-style: italic; font-stretch: 112%;
+    text-transform: none; letter-spacing: 0; color: var(--text);
+    padding-block: var(--s-8); min-height: 44px;
+    opacity: 0; translate: 0 13px;
+    transition: opacity var(--m-233) var(--ease), translate var(--m-377) var(--ease), scale var(--m-144) var(--ease);
+  }
+  .nav-links a::before { counter-increment: menu; content: "0" counter(menu); font: 500 var(--t-13)/1 var(--font-mono); color: var(--text-2); font-style: normal; }
+  .nav-links a::after { height: var(--s-2); bottom: 0; transition: transform var(--m-377) var(--ease), background-color var(--m-144) ease; }
+  .nav-links a:active { scale: .97; }
+  .nav-links a:active::after { background: var(--accent); }
+
+  /* open: panel fades in, each word rises, then its underline draws left → right */
+  .nav.menu-open .nav-links { opacity: 1; visibility: visible; transition: opacity var(--m-233) var(--ease), visibility 0s; }
+  .nav.menu-open .nav-links a { opacity: 1; translate: 0 0; }
+  .nav.menu-open .nav-links a::after { transform: scaleX(1); }
+  .nav.menu-open .nav-links a:nth-child(2) { transition-delay: 55ms; }
+  .nav.menu-open .nav-links a:nth-child(3) { transition-delay: 89ms; }
+  .nav.menu-open .nav-links a:nth-child(4) { transition-delay: 144ms; }
+  .nav.menu-open .nav-links a:nth-child(1)::after { transition-delay: 144ms; }
+  .nav.menu-open .nav-links a:nth-child(2)::after { transition-delay: 199ms; }
+  .nav.menu-open .nav-links a:nth-child(3)::after { transition-delay: 233ms; }
+  .nav.menu-open .nav-links a:nth-child(4)::after { transition-delay: 288ms; }
+  .nav.menu-open .nav-links a:active { transition-delay: 0s; }
+  .nav.menu-open ~ .wa-fab { opacity: 0; visibility: hidden; }   /* the list owns the screen while open */
 }
 
 /* ---------- 1 · hero (always dark: it sits on the photo) ---------- */
