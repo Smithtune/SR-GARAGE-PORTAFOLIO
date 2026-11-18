@@ -21,6 +21,33 @@ themeBtn.addEventListener('click', () => {
   try { localStorage.setItem('sr-theme', next); } catch (e) {}
 });
 
+/* ---------- phone menu (≤609px only): link list over the blurred page ---------- */
+const phone = matchMedia('(max-width: 609px)');
+const nav = document.querySelector('.nav');
+const menuBtn = document.querySelector('.menu-btn');
+const menuLinks = document.getElementById('nav-links');
+const behind = [document.querySelector('main'), document.querySelector('.wa-fab')];
+function setMenu(open, { focusBtn = false } = {}) {
+  if (open && !phone.matches) return;
+  nav.classList.toggle('menu-open', open);
+  menuBtn.setAttribute('aria-expanded', String(open));
+  menuBtn.textContent = open ? 'Cerrar' : 'Menú';
+  root.style.overflow = open ? 'hidden' : '';
+  behind.forEach(el => el && (el.inert = open));
+  if (open) menuLinks.querySelector('a').focus({ preventScroll: true });
+  else if (focusBtn) menuBtn.focus();
+}
+menuBtn.addEventListener('click', () => setMenu(!nav.classList.contains('menu-open')));
+menuLinks.addEventListener('click', e => {
+  if (!nav.classList.contains('menu-open')) return;
+  if (e.target.closest('a')) setMenu(false);          // the link then scrolls to its section
+  else if (e.target === menuLinks) setMenu(false);    // tap on the backdrop
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && nav.classList.contains('menu-open')) setMenu(false, { focusBtn: true });
+});
+phone.addEventListener('change', () => { if (!phone.matches) setMenu(false); });
+
 /* ---------- process: 13 stepped gradient rows ---------- */
 const steps = document.getElementById('steps');
 for (let i = 0; i < 13; i++) {
@@ -161,9 +188,13 @@ let filmShown = -1, filmWanted = 0, filmLoading = false;
 // Cloudinary cuts each still from the uploaded MP4 on request (so_ = start offset in seconds) and caches it on its CDN.
 // Phones get 720 px frames: 96 decoded 1280 px frames need ~350 MB of memory, 720 px ~112 MB.
 const FILM_URL = 'https://res.cloudinary.com/ql2k8tv7/video/upload/so_{t},w_{w}/v1795040223/carbackground.webp';
+// Phones held upright (≤609 CSS px, portrait) get the 9:16 film (720×1280, 8 s — same timing as the 16:9 one).
+// Empty it to fall back to the 16:9 film over a blurred fill (the haze path in drawFilm).
+const FILM_URL_PORTRAIT = 'https://res.cloudinary.com/ql2k8tv7/video/upload/so_{t},w_{w}/v1795043998/A_car_store_logo_is_animated_wit_986836_mvp.webp';
 const FILM_SECONDS = 8;
-let filmWidth = 1280;
-const filmSrc = i => FILM_URL.replace('{t}', (i * FILM_SECONDS / FILM_COUNT).toFixed(3)).replace('{w}', filmWidth);
+let filmWidth = 1280, filmUrl = FILM_URL, filmGen = 0;
+const filmSrc = i => filmUrl.replace('{t}', (i * FILM_SECONDS / FILM_COUNT).toFixed(3)).replace('{w}', filmWidth);
+const phonePortrait = () => !!FILM_URL_PORTRAIT && canvas.clientWidth > 0 && canvas.clientWidth <= 609 && canvas.clientHeight > canvas.clientWidth;
 
 function sizeCanvas() {
   const dpr = Math.min(devicePixelRatio || 1, 2);
@@ -182,7 +213,13 @@ function drawFilm(i) {
   const k = nearestLoaded(i);
   if (k < 0 || k === filmShown || !canvas.width) return;
   const img = film[k], W = canvas.width, H = canvas.height, iw = img.naturalWidth, ih = img.naturalHeight;
-  if (W >= H) {
+  if (ih > iw) {
+    // the 9:16 film on a phone: cover, but never trim more than 7% per side — the finished logo
+    // spans nearly the whole frame width. On very tall phones the thin gap above/below gets the blur fill.
+    const s = Math.min(Math.max(W / iw, H / ih), W / (iw * 0.86)), w = iw * s, h = ih * s;
+    if (h < H) { hazeCtx.drawImage(img, 0, 0, haze.width, haze.height); ctx.imageSmoothingEnabled = true; ctx.drawImage(haze, 0, 0, W, H); }
+    ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+  } else if (W >= H) {
     // landscape: object-fit cover, the film fills the screen
     const s = Math.max(W / iw, H / ih), w = iw * s, h = ih * s;
     ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
@@ -204,13 +241,15 @@ function loadFilm() {
   filmLoading = true;
   sizeCanvas();
   filmWidth = canvas.clientWidth && canvas.clientWidth <= 820 ? 720 : 1280;   // CSS px, not device px: a 3x iPhone is still a phone
+  filmUrl = phonePortrait() ? FILM_URL_PORTRAIT : FILM_URL;
+  const gen = filmGen;
   let next = 0;                               // frame 1 first, then in order, 4 requests at a time
   const worker = async () => {
-    while (next < FILM_COUNT) {
+    while (next < FILM_COUNT && gen === filmGen) {
       const i = next++;
       const img = new Image();
       img.src = filmSrc(i);
-      try { await img.decode(); film[i] = img; drawFilm(filmWanted); } catch (e) { /* skip a missing frame */ }
+      try { await img.decode(); if (gen !== filmGen) return; film[i] = img; drawFilm(filmWanted); } catch (e) { /* skip a missing frame */ }
     }
   };
   for (let n = 0; n < 4; n++) worker();
@@ -239,7 +278,14 @@ function render() {
 
 function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(render); } }
 addEventListener('scroll', onScroll, { passive: true });
-addEventListener('resize', () => { measure(); sizeCanvas(); filmShown = -1; onScroll(); });
+addEventListener('resize', () => {
+  measure(); sizeCanvas(); filmShown = -1;
+  // a phone rotated between portrait and landscape switches between the 9:16 and 16:9 films
+  if (filmLoading && (phonePortrait() ? FILM_URL_PORTRAIT : FILM_URL) !== filmUrl) {
+    filmGen++; film.fill(undefined); filmLoading = false; loadFilm();
+  }
+  onScroll();
+});
 reduce.addEventListener('change', () => {
   measure();
   if (!reduce.matches) loadFilm();           // reduced motion keeps the poster still and loads nothing
