@@ -187,7 +187,7 @@ const film = new Array(FILM_COUNT);           // decoded images, filled as they 
 let filmShown = -1, filmWanted = 0, filmLoading = false;
 // Cloudinary cuts each still from the uploaded MP4 on request (so_ = start offset in seconds) and caches it on its CDN.
 // Phones get 720 px frames: 96 decoded 1280 px frames need ~350 MB of memory, 720 px ~112 MB.
-const FILM_URL = 'https://res.cloudinary.com/ql2k8tv7/video/upload/so_{t},w_{w}/v1795040223/carbackground.webp';
+const FILM_URL = 'https://res.cloudinary.com/ql2k8tv7/video/upload/so_{t},w_{w}/v1795088707/A_car_store_logo_is_animated_wit_985695_tOu.webp';
 // Phones held upright (≤609 CSS px, portrait) get the 9:16 film (720×1280, 8 s — same timing as the 16:9 one).
 // Empty it to fall back to the 16:9 film over a blurred fill (the haze path in drawFilm).
 const FILM_URL_PORTRAIT = 'https://res.cloudinary.com/ql2k8tv7/video/upload/so_{t},w_{w}/v1795043998/A_car_store_logo_is_animated_wit_986836_mvp.webp';
